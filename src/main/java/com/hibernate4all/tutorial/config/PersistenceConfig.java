@@ -23,7 +23,7 @@ public class PersistenceConfig {
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		em.setDataSource(dataSourceH2());
+		em.setDataSource(dataSource());
 		em.setPackagesToScan(new String[] { "com.hibernate4all.tutorial.domain" });
 
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -34,12 +34,13 @@ public class PersistenceConfig {
 	}
 
 	@Bean
-	public DataSource dataSourceH2() {
+	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("org.h2.Driver");
-		dataSource.setUrl("jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-		dataSource.setUsername("sa");
-		dataSource.setPassword("");
+		// dataSource.setDriverClassName("org.postgresql.Driver");
+		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		dataSource.setUrl("jdbc:mysql://192.168.150.4:3306/hibernate4all");
+		dataSource.setUsername("root");
+		dataSource.setPassword("root");
 
 		return dataSource;
 	}
@@ -54,8 +55,10 @@ public class PersistenceConfig {
 
 	private Properties additionalProperties() {
 		Properties properties = new Properties();
-		properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+		// properties.setProperty("hibernate.hbm2ddl.auto", "create-drop");
+		properties.setProperty("hibernate.hbm2ddl.auto", "update");
+		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
+		// properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
 		return properties;
 	}
 }

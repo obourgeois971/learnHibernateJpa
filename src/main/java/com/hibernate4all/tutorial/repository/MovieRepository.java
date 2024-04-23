@@ -20,16 +20,16 @@ public class MovieRepository {
 	@PersistenceContext
 	EntityManager entityManager;
 	
-	// 1-Premiers pas avec hibernate
+	// 1-Etat JPA - Persist, Detach et Flush
 	@Transactional
 	public void persist(Movie movie) {
 		// throw new UnsupportedOperationException();
 		LOGGER.trace("avant entityManager.contains() " + entityManager.contains(movie)); //  false
 		entityManager.persist(movie);
 		LOGGER.trace("après entityManager.contains() " + entityManager.contains(movie)); // true
-		entityManager.detach(movie);
-		LOGGER.trace("après entityManager.contains() " + entityManager.contains(movie)); // false
-		entityManager.flush();
+		// entityManager.detach(movie);
+		// LOGGER.trace("après entityManager.contains() " + entityManager.contains(movie)); // false
+		// entityManager.flush();
 	}
 	
 	// 1-Premiers pas avec hibernate
@@ -51,10 +51,17 @@ public class MovieRepository {
 		return entityManager.merge(movie);
 	}
 	
+	/** 
+	 * Traitement du cache
+	 * @param id
+	 */
 	@Transactional
 	public void remove(Long id) {
-		Movie movie = entityManager.find(Movie.class, id);
-		entityManager.remove(movie);
+		Movie movie1 = entityManager.find(Movie.class, id);
+		Movie movie2 = entityManager.find(Movie.class, id);
+		Movie movie3 = entityManager.find(Movie.class, id);
+		Movie movie4 = entityManager.find(Movie.class, id);
+		entityManager.remove(movie1);
 	}
 	
 	// @Transactional
