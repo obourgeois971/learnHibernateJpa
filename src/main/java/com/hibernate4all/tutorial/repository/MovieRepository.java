@@ -1,6 +1,7 @@
 package com.hibernate4all.tutorial.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.hibernate4all.tutorial.domain.Movie;
+import com.hibernate4all.tutorial.domain.MovieDetails;
 
 @Repository
 public class MovieRepository {
@@ -51,17 +53,31 @@ public class MovieRepository {
 		return entityManager.merge(movie);
 	}
 	
+	@Transactional
+	public Optional<Movie> update(Movie movie) {
+		Movie movieFound = entityManager.find(Movie.class, movie.getId());
+		if(movieFound != null) {
+			movieFound.setDescription(movie.getDescription());
+			movieFound.setName(movie.getName());
+		}
+		return Optional.ofNullable(movieFound);
+	}
+	
 	/** 
 	 * Traitement du cache
 	 * @param id
 	 */
 	@Transactional
-	public void remove(Long id) {
-		Movie movie1 = entityManager.find(Movie.class, id);
-		Movie movie2 = entityManager.find(Movie.class, id);
-		Movie movie3 = entityManager.find(Movie.class, id);
-		Movie movie4 = entityManager.find(Movie.class, id);
-		entityManager.remove(movie1);
+	public boolean remove(Long id) {
+		boolean result = false;
+		if(id != null) {
+			Movie movie = entityManager.find(Movie.class, id);
+			if(movie != null) {
+				entityManager.remove(movie);
+				return true;
+			}
+		} 		
+		return result;
 	}
 	
 	// @Transactional
@@ -69,5 +85,13 @@ public class MovieRepository {
 		// Movie result = entityManager.getReference(Movie.class, l);
 		// LOGGER.trace("movie name : " + result);
 		return entityManager.getReference(Movie.class, l);
+	}
+	
+	
+	@Transactional
+	public void addMovieDetails(MovieDetails movieDetails, Long idMovie) {
+		Movie movieRef = getReference(idMovie);
+		movieDetails.setMovie(movieRef);
+		entityManager.persist(movieDetails);
 	}
 }

@@ -1,5 +1,7 @@
 package com.hibernate4all.tutorial.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,4 +27,11 @@ public class MovieService {
 		movie.setDescription(description); // Résultat : Hibernate met-à-jour toue l'entité c'est du dirty checking
 	}
 	
+	@Transactional
+	public List<Movie> addMovieTheGetAll() {
+		Movie movie = new Movie();
+		movie.setName("Fight Club");
+		repository.persist(movie); // Flush auto
+		return repository.getAll();
+	}
 }

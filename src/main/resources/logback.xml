@@ -5,7 +5,7 @@
 		class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>
-				%-5level %logger{15}.%M %msg%n
+				%highlight(%-5level) %logger{15}.%M %msg%n
 			</pattern>
 		</encoder>
 	</appender>
@@ -20,12 +20,12 @@
 	<logger name="com.hibernate4all.tutorial.repository.MovieRepository" level="TRACE"/>
 	
 	<!-- Pour voir les transaction overte/fermée -->
-	<!-- logger name="org.springframework.orm.jpa.JpaTransactionManager" level="DEBUG"/ -->
+	<logger name="org.springframework.orm.jpa.JpaTransactionManager" level="DEBUG"/>
 	
 	<!-- Ouverture/fermeture de session -->
-	<!-- logger name="org.hibernate.internal.SessionImpl" level="TRACE"/ -->
+	<logger name="org.hibernate.internal.SessionImpl" level="TRACE"/>
 	
-	<root level="WARN">
+	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
 
